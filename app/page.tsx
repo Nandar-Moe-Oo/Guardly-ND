@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, ReactNode, useMemo, useState } from "react";
 
 type ChatMessage = {
   id: string;
@@ -46,7 +46,7 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "more", label: "More" },
 ];
 
-const tabIcons: Record<TabKey, JSX.Element> = {
+const tabIcons: Record<TabKey, ReactNode> = {
   home: (
     <svg className="tab-icon" viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor" fill="none">
       <path
