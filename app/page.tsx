@@ -22,7 +22,8 @@ type QuickActionKey =
   | "chat"
   | "announce"
   | "leave"
-  | "emergency";
+  | "emergency"
+  | "history";
 
 const assignment = {
   site: "Pier 47 Logistics Gate",
