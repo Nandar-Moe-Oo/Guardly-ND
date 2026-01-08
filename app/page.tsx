@@ -1068,47 +1068,38 @@ export default function Home() {
     }
   };
 
-  const renderMoreTab = () => (
-    <>
-      <section className="space-y-3 rounded-3xl border border-slate-800/80 bg-[#0b1224]/90 p-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-xs text-slate-400">More tools</p>
-            <h3 className="text-lg font-semibold">Access other actions</h3>
-          </div>
-          {moreSection && (
-            <button
-              type="button"
-              onClick={() => setMoreSection(null)}
-              className="text-[11px] uppercase tracking-wide text-slate-400"
-            >
-              Close
-            </button>
-          )}
-        </div>
+  const renderMoreTab = () => {
+    if (!moreSection) {
+      return (
         <div className="space-y-2">
           {moreOptions.map((option) => (
             <button
               key={option.key}
               type="button"
               onClick={() => setMoreSection(option.key)}
-              className={`flex w-full items-center justify-between rounded-2xl border px-3 py-3 text-left text-sm font-semibold transition ${
-                moreSection === option.key
-                  ? "border-slate-100 bg-slate-100/10 text-white"
-                  : "border-slate-700 text-slate-300"
-              }`}
+              className="flex w-full items-center justify-between rounded-2xl border border-slate-700 px-3 py-3 text-left text-sm font-semibold text-slate-200"
             >
               <span>{option.label}</span>
               <span className="text-[10px] uppercase tracking-wide">GO</span>
             </button>
           ))}
         </div>
-      </section>
-      {moreSection ? (
-        <div className="space-y-4">{renderMoreContent()}</div>
-      ) : null}
-    </>
-  );
+      );
+    }
+
+    return (
+      <div className="space-y-4">
+        <button
+          type="button"
+          onClick={() => setMoreSection(null)}
+          className="text-left text-xs uppercase tracking-wide text-slate-400"
+        >
+          &lt; Back
+        </button>
+        {renderMoreContent()}
+      </div>
+    );
+  };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -1135,29 +1126,31 @@ export default function Home() {
       </div>
 
       <main className="relative mx-auto flex w-full max-w-sm flex-col gap-4 rounded-[32px] bg-[#070b15]/95 p-6 pb-32 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur">
-        <header className="space-y-3">
-          <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-400">
-            <span>guardly</span>
-            <span>v0.4</span>
-          </div>
-          <div className="rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/80 to-slate-950/90 p-4">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-xs text-slate-400">Today&apos;s assignment</p>
-                <h1 className="text-2xl font-semibold">{assignment.site}</h1>
-                <p className="text-sm text-slate-400">{assignment.post}</p>
+        {activeTab !== "more" && (
+          <header className="space-y-3">
+            <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-400">
+              <span>guardly</span>
+              <span>v0.4</span>
+            </div>
+            <div className="rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/80 to-slate-950/90 p-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-xs text-slate-400">Today&apos;s assignment</p>
+                  <h1 className="text-2xl font-semibold">{assignment.site}</h1>
+                  <p className="text-sm text-slate-400">{assignment.post}</p>
+                </div>
+                <div className="rounded-2xl border border-emerald-500/30 px-3 py-1 text-xs text-emerald-200">
+                  {assignment.window}
+                </div>
               </div>
-              <div className="rounded-2xl border border-emerald-500/30 px-3 py-1 text-xs text-emerald-200">
-                {assignment.window}
+              <p className="mt-3 text-xs text-slate-500">Supervisor: {assignment.supervisor}</p>
+              <div className="mt-3 flex items-center justify-between rounded-2xl border border-slate-800/80 bg-slate-900/60 px-3 py-2 text-xs">
+                <span>Status</span>
+                <span className="font-semibold text-emerald-200">{statusLabel}</span>
               </div>
             </div>
-            <p className="mt-3 text-xs text-slate-500">Supervisor: {assignment.supervisor}</p>
-            <div className="mt-3 flex items-center justify-between rounded-2xl border border-slate-800/80 bg-slate-900/60 px-3 py-2 text-xs">
-              <span>Status</span>
-              <span className="font-semibold text-emerald-200">{statusLabel}</span>
-            </div>
-          </div>
-        </header>
+          </header>
+        )}
 
         <div className="space-y-4">{renderTabContent()}</div>
 
