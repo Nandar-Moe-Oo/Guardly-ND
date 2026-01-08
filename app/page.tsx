@@ -9,7 +9,7 @@ type ChatMessage = {
   time: string;
 };
 
-type TabKey = "home" | "check" | "patrol" | "report" | "history" | "more";
+type TabKey = "home" | "check" | "patrol" | "report" | "more";
 
 type ReportSectionKey = "incident" | "visitor" | "vehicle" | "occurrence" | "handover";
 
@@ -57,7 +57,6 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "check", label: "Check In/Out" },
   { key: "patrol", label: "Patrol" },
   { key: "report", label: "Report" },
-  { key: "history", label: "History" },
   { key: "more", label: "More" },
 ];
 
@@ -101,13 +100,6 @@ const tabIcons: Record<TabKey, ReactNode> = {
       />
       <path d="M12 9v4.5" strokeLinecap="round" />
       <circle cx="12" cy="16.5" r="0.6" fill="currentColor" />
-    </svg>
-  ),
-  history: (
-    <svg className="tab-icon" viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor" fill="none">
-      <path d="M12 5v7l4 2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M5 12a7 7 0 1 0 2.1-5" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M3.5 7.5h3v3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   more: (
@@ -183,7 +175,8 @@ const quickActions: QuickAction[] = [
     label: "Attendance",
     icon: "📅",
     accent: "from-indigo-400/40 to-indigo-600/30",
-    target: "history",
+    target: "more",
+    moreSection: "history",
   },
 ];
 
@@ -890,8 +883,6 @@ export default function Home() {
     );
   };
 
-  const renderHistoryTab = () => renderHistorySection();
-
   const renderMoreContent = () => {
     if (!moreSection) {
       return null;
@@ -1122,8 +1113,6 @@ export default function Home() {
         return renderPatrolTab();
       case "report":
         return renderReportTab();
-      case "history":
-        return renderHistoryTab();
       case "more":
         return renderMoreTab();
       default:
