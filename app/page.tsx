@@ -9,7 +9,7 @@ type ChatMessage = {
   time: string;
 };
 
-type TabKey = "home" | "check" | "patrol" | "report" | "more";
+type TabKey = "home" | "check" | "patrol" | "report" | "history" | "more";
 
 type ReportSectionKey = "incident" | "visitor" | "vehicle" | "occurrence" | "handover";
 
@@ -57,6 +57,7 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: "check", label: "Check In/Out" },
   { key: "patrol", label: "Patrol" },
   { key: "report", label: "Report" },
+  { key: "history", label: "History" },
   { key: "more", label: "More" },
 ];
 
@@ -100,6 +101,13 @@ const tabIcons: Record<TabKey, ReactNode> = {
       />
       <path d="M12 9v4.5" strokeLinecap="round" />
       <circle cx="12" cy="16.5" r="0.6" fill="currentColor" />
+    </svg>
+  ),
+  history: (
+    <svg className="tab-icon" viewBox="0 0 24 24" strokeWidth="1.7" stroke="currentColor" fill="none">
+      <path d="M12 5v7l4 2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 12a7 7 0 1 0 2.1-5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M3.5 7.5h3v3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   more: (
@@ -175,8 +183,7 @@ const quickActions: QuickAction[] = [
     label: "Attendance",
     icon: "📅",
     accent: "from-indigo-400/40 to-indigo-600/30",
-    target: "more",
-    moreSection: "history",
+    target: "history",
   },
 ];
 
@@ -618,6 +625,41 @@ export default function Home() {
     </>
   );
 
+  const renderHistorySection = () => (
+    <section className="space-y-4 rounded-3xl border border-slate-800/70 bg-slate-900/70 p-4">
+      <div className="flex items-center justify-between">
+        <h3 className="text-lg font-semibold">Attendance history</h3>
+        <span className="text-xs text-slate-400">Last 14 days</span>
+      </div>
+      <ul className="space-y-2 text-sm text-slate-200">
+        {["Thu, Jan 2", "Wed, Jan 1", "Tue, Dec 31", "Mon, Dec 30"].map((day, index) => (
+          <li
+            key={day}
+            className="flex items-center justify-between rounded-2xl border border-slate-800/70 bg-slate-900/60 px-3 py-2"
+          >
+            <div>
+              <p className="font-semibold">{day}</p>
+              <p className="text-xs text-slate-500">Pier 47 • 06:00 – 14:00</p>
+            </div>
+            <span
+              className={`text-[10px] uppercase tracking-wide rounded-full px-3 py-1 ${
+                index === 0
+                  ? "bg-emerald-500/10 text-emerald-200 border border-emerald-400/40"
+                  : "bg-indigo-500/10 text-indigo-200 border border-indigo-400/40"
+              }`}
+            >
+              {index === 0 ? "On time" : "Completed"}
+            </span>
+          </li>
+        ))}
+      </ul>
+      <div className="rounded-2xl border border-slate-800/70 bg-slate-900/60 p-3 text-xs text-slate-300">
+        <p className="text-sm font-semibold">Missed or late</p>
+        <p className="mt-1 text-slate-400">System flags any missed check-in so the guard knows their status.</p>
+      </div>
+    </section>
+  );
+
   const renderReportContent = () => {
     switch (reportSection) {
       case "incident":
@@ -848,6 +890,8 @@ export default function Home() {
     );
   };
 
+  const renderHistoryTab = () => renderHistorySection();
+
   const renderMoreContent = () => {
     if (!moreSection) {
       return null;
@@ -855,40 +899,7 @@ export default function Home() {
 
     switch (moreSection) {
       case "history":
-        return (
-          <section className="space-y-4 rounded-3xl border border-slate-800/70 bg-slate-900/70 p-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold">Attendance history</h3>
-              <span className="text-xs text-slate-400">Last 14 days</span>
-            </div>
-            <ul className="space-y-2 text-sm text-slate-200">
-              {["Thu, Jan 2", "Wed, Jan 1", "Tue, Dec 31", "Mon, Dec 30"].map((day, index) => (
-                <li
-                  key={day}
-                  className="flex items-center justify-between rounded-2xl border border-slate-800/70 bg-slate-900/60 px-3 py-2"
-                >
-                  <div>
-                    <p className="font-semibold">{day}</p>
-                    <p className="text-xs text-slate-500">Pier 47 • 06:00 – 14:00</p>
-                  </div>
-                  <span
-                    className={`text-[10px] uppercase tracking-wide rounded-full px-3 py-1 ${
-                      index === 0
-                        ? "bg-emerald-500/10 text-emerald-200 border border-emerald-400/40"
-                        : "bg-indigo-500/10 text-indigo-200 border border-indigo-400/40"
-                    }`}
-                  >
-                    {index === 0 ? "On time" : "Completed"}
-                  </span>
-                </li>
-              ))}
-            </ul>
-            <div className="rounded-2xl border border-slate-800/70 bg-slate-900/60 p-3 text-xs text-slate-300">
-              <p className="text-sm font-semibold">Missed or late</p>
-              <p className="mt-1 text-slate-400">System flags any missed check-in so the guard knows their status.</p>
-            </div>
-          </section>
-        );
+        return renderHistorySection();
       case "chat":
         return (
           <section className="space-y-4 rounded-3xl border border-slate-800/70 bg-[#0b1224] p-4">
@@ -1111,6 +1122,8 @@ export default function Home() {
         return renderPatrolTab();
       case "report":
         return renderReportTab();
+      case "history":
+        return renderHistoryTab();
       case "more":
         return renderMoreTab();
       default:
@@ -1119,55 +1132,69 @@ export default function Home() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 px-4 py-8 text-slate-100">
+    <div className="relative min-h-screen bg-slate-950 text-slate-100">
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="orb orb-one" />
         <div className="orb orb-two" />
       </div>
 
-      <main className="relative mx-auto flex w-full max-w-sm flex-col gap-4 rounded-[32px] bg-[#070b15]/95 p-6 pb-32 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur">
-        {activeTab !== "more" && (
-          <header className="space-y-3">
-            <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-400">
-              <span>guardly</span>
-              <span>v0.4</span>
-            </div>
-            <div className="rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/80 to-slate-950/90 p-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-xs text-slate-400">Today&apos;s assignment</p>
-                  <h1 className="text-2xl font-semibold">{assignment.site}</h1>
-                  <p className="text-sm text-slate-400">{assignment.post}</p>
-                </div>
-                <div className="rounded-2xl border border-emerald-500/30 px-3 py-1 text-xs text-emerald-200">
-                  {assignment.window}
-                </div>
-              </div>
-              <p className="mt-3 text-xs text-slate-500">Supervisor: {assignment.supervisor}</p>
-              <div className="mt-3 flex items-center justify-between rounded-2xl border border-slate-800/80 bg-slate-900/60 px-3 py-2 text-xs">
-                <span>Status</span>
-                <span className="font-semibold text-emerald-200">{statusLabel}</span>
-              </div>
-            </div>
-          </header>
-        )}
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-sm flex-col">
+        <header className="px-6 pt-6 pb-4 text-center text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-400">
+          GUARDLY <span className="text-slate-200">v0.4</span>
+        </header>
 
-        <div className="space-y-4">{renderTabContent()}</div>
+        <div className="flex-1 overflow-hidden px-4 pb-4">
+          <main className="flex h-full flex-col gap-4 rounded-[32px] bg-[#070b15]/95 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur">
+            <div className="flex-1 overflow-y-auto pr-1">
+              <div className="space-y-4 pb-6">
+                {activeTab !== "more" && (
+                  <section className="space-y-3">
+                    <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-400">
+                      <span>guardly</span>
+                      <span>v0.4</span>
+                    </div>
+                    <div className="rounded-3xl border border-slate-800/80 bg-gradient-to-br from-slate-900/80 to-slate-950/90 p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs text-slate-400">Today&apos;s assignment</p>
+                          <h1 className="text-2xl font-semibold">{assignment.site}</h1>
+                          <p className="text-sm text-slate-400">{assignment.post}</p>
+                        </div>
+                        <div className="rounded-2xl border border-emerald-500/30 px-3 py-1 text-xs text-emerald-200">
+                          {assignment.window}
+                        </div>
+                      </div>
+                      <p className="mt-3 text-xs text-slate-500">Supervisor: {assignment.supervisor}</p>
+                      <div className="mt-3 flex items-center justify-between rounded-2xl border border-slate-800/80 bg-slate-900/60 px-3 py-2 text-xs">
+                        <span>Status</span>
+                        <span className="font-semibold text-emerald-200">{statusLabel}</span>
+                      </div>
+                    </div>
+                  </section>
+                )}
 
-        <nav className="tab-bar">
-          {tabs.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => handleTabChange(tab.key)}
-              className="tab-button"
-              data-active={activeTab === tab.key}
-            >
-              {tabIcons[tab.key]}
-              <span className="text-[11px] uppercase tracking-wide">{tab.label}</span>
-            </button>
-          ))}
-        </nav>
-      </main>
+                {renderTabContent()}
+              </div>
+            </div>
+          </main>
+        </div>
+
+        <div className="px-4 pb-6">
+          <nav className="tab-bar">
+            {tabs.map((tab) => (
+              <button
+                key={tab.key}
+                onClick={() => handleTabChange(tab.key)}
+                className="tab-button"
+                data-active={activeTab === tab.key}
+              >
+                {tabIcons[tab.key]}
+                <span className="text-[11px] uppercase tracking-wide">{tab.label}</span>
+              </button>
+            ))}
+          </nav>
+        </div>
+      </div>
     </div>
   );
 }
