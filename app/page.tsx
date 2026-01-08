@@ -1127,15 +1127,15 @@ export default function Home() {
         <div className="orb orb-two" />
       </div>
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-sm flex-col">
-        <header className="px-6 pt-6 pb-4 text-center text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-400">
+      <div className="relative z-10 mx-auto flex h-dvh w-full max-w-sm flex-col overflow-hidden">
+        <header className="shrink-0 px-6 pt-6 pb-4 text-center text-[11px] font-semibold uppercase tracking-[0.4em] text-slate-400">
           GUARDLY <span className="text-slate-200">v0.4</span>
         </header>
 
         <div className="flex-1 overflow-hidden px-4 pb-4">
-          <main className="flex h-full flex-col gap-4 rounded-[32px] bg-[#070b15]/95 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur">
+          <main className="flex h-full flex-col rounded-[32px] bg-[#070b15]/95 p-6 shadow-[0_40px_120px_rgba(0,0,0,0.55)] backdrop-blur">
             <div className="flex-1 overflow-y-auto pr-1">
-              <div className="space-y-4 pb-6">
+              <div className="space-y-4 pb-24">
                 {activeTab !== "more" && (
                   <section className="space-y-3">
                     <div className="flex items-center justify-between text-xs uppercase tracking-[0.2em] text-slate-400">
@@ -1168,21 +1168,25 @@ export default function Home() {
           </main>
         </div>
 
-        <div className="px-4 pb-6">
-          <nav className="tab-bar">
-            {tabs.map((tab) => (
-              <button
-                key={tab.key}
-                onClick={() => handleTabChange(tab.key)}
-                className="tab-button"
-                data-active={activeTab === tab.key}
-              >
-                {tabIcons[tab.key]}
-                <span className="text-[11px] uppercase tracking-wide">{tab.label}</span>
-              </button>
-            ))}
-          </nav>
-        </div>
+        <footer>
+          <div className="fixed inset-x-0 bottom-0 z-30 border-t border-slate-800/70 bg-slate-950/95">
+            <div className="mx-auto w-full max-w-sm px-4 py-3">
+              <nav className="tab-bar">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.key}
+                    onClick={() => handleTabChange(tab.key)}
+                    className="tab-button"
+                    data-active={activeTab === tab.key}
+                  >
+                    {tabIcons[tab.key]}
+                    <span className="text-[11px] uppercase tracking-wide">{tab.label}</span>
+                  </button>
+                ))}
+              </nav>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

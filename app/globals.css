@@ -144,24 +144,16 @@ body {
 }
 
 .tab-bar {
-  position: sticky;
-  bottom: 0;
   display: flex;
   gap: 0.75rem;
-  border-radius: 1.5rem;
-  padding: 0.65rem 1rem;
-  margin-top: 1rem;
-  background: rgba(248, 250, 252, 0.96);
-  border: 1px solid rgba(148, 163, 184, 0.5);
-  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.35);
-  backdrop-filter: blur(18px);
+  padding: 0;
 }
 
 .tab-button {
   flex: 1;
   border: none;
   background: transparent;
-  color: #475569;
+  color: #94a3b8;
   border-radius: 1rem;
   padding: 0.35rem 0.5rem;
   display: flex;
@@ -173,7 +165,7 @@ body {
 }
 
 .tab-button[data-active="true"] {
-  color: #2563eb;
+  color: #38bdf8;
 }
 
 .tab-icon {
